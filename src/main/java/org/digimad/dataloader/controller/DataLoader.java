@@ -1,5 +1,6 @@
 package org.digimad.dataloader.controller;
 
+import org.digimad.dataloader.dto.DataLoadRequest;
 import org.digimad.dataloader.dto.Table;
 import org.digimad.dataloader.entities.OrderItem;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,9 @@ public class DataLoader {
     }
 
     @PostMapping("/tables-data")
-    public ResponseEntity<List<Table>> getTablesData() {
+    public ResponseEntity<List<Table>> getTablesData(@RequestBody DataLoadRequest request) {
+        List<Table> tables = request.getTables();
+//        Table table = tables.get();
         return null;
     }
 
