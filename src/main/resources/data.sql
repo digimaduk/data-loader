@@ -16,17 +16,23 @@ VALUES (1, 1); -- Laptop belongs to Electronics
 INSERT INTO product_category (product_id, category_id)
 VALUES (2, 1); -- Smartphone belongs to Electronics
 
-INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, address)
-VALUES (1, 'John', 'Doe', 'john.doe@example.com', '123-456-7890', '123 Main St');
+INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, address,created_date)
+VALUES (1, 'John', 'Doe', 'john.doe@example.com', '123-456-7890', '123 Main St', '2022-01-01 12:00:00.000000');
 
-INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, address)
-VALUES (2, 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Oak Ave');
+INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, address,created_date)
+VALUES (2, 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Oak Ave', '2022-01-02 14:30:00.000000');
+
+INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, address,created_date)
+VALUES (3, 'Ronis', 'Xholi', 'ronis.tzol@gmail.com', '745-947-2289', '121 Melmerby Court', '2024-01-27 16:46:33.523906');
 
 INSERT INTO orders (order_id, customer_id, status, total_amount)
 VALUES (1, 1, 'Shipped', 1200.00);
 
 INSERT INTO orders (order_id, customer_id, status, total_amount)
 VALUES (2, 2, 'Processing', 800.00);
+
+INSERT INTO orders (order_id, customer_id, status, total_amount)
+VALUES (3, 3, 'Delivered', 800.00);
 
 INSERT INTO order_items (order_item_id, order_id, product_id, quantity, unit_price, total_price)
 VALUES (1, 1, 1, 1, 1200.00, 1200.00); -- Laptop in the first order

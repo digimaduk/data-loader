@@ -1,0 +1,17 @@
+[
+  {
+    "name": "customers",
+    "pk": "customer_id",
+    "fk": null
+  },
+  {
+    "name": "orders",
+    "pk": "order_id",
+    "fk": "customer_id"
+  },
+  {
+    "name": "order_items",
+    "pk": "order_item_id",
+    "fk": "order_id"
+  }
+]

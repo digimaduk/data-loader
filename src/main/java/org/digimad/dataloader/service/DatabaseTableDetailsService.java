@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,15 +33,15 @@ public class DatabaseTableDetailsService {
 
     public List<Map<String, Object>> getTableDetails(DataLoadRequest request) {
         String sql = queryBuilder.generateQuery(request);
-        return jdbcTemplate.queryForList(sql);
+        return jdbcTemplate.queryForList(sql, Timestamp.valueOf(request.getFrom()), Timestamp.valueOf(request.getTo()));
     }
 
     public List<String> getAllTableNames() {
         List<String> tableNames = new ArrayList<>();
         try {
-            DatabaseMetaData metaData = jdbcTemplate.getDataSource().getConnection().getMetaData();
+            Connection connection = jdbcTemplate.getDataSource().getConnection();
+            DatabaseMetaData metaData = connection.getMetaData();
             ResultSet resultSet = metaData.getTables(null, "PUBLIC", null, new String[]{"TABLE"});
-
             while (resultSet.next()) {
                 String tableName = resultSet.getString("TABLE_NAME");
                 // Check if the table is not a system table
@@ -52,6 +50,7 @@ public class DatabaseTableDetailsService {
 //                }
                 tableNames.add(tableName);
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception appropriately in your application
         }

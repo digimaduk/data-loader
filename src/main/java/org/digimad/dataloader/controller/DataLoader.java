@@ -52,9 +52,6 @@ public class DataLoader {
 
     @PostMapping("/tables")
     public List<Map<String, Object>> getTablesData(@RequestBody DataLoadRequest request) {
-        List<Table> tables = request.getTables();
-        if (!CollectionUtils.isEmpty(tables)) {
-        }
         return databaseTableDetailsService.getTableDetails(request);
     }
 
