@@ -1,18 +1,24 @@
 package org.digimad.dataloader.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.digimad.dataloader.dto.DataLoadRequest;
 import org.digimad.dataloader.dto.Table;
-import org.digimad.dataloader.entities.OrderItem;
+import org.digimad.dataloader.service.DatabaseTableDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class DataLoader {
+
+    private final DatabaseTableDetailsService databaseTableDetailsService;
 
 //    @GetMapping("/{orderId}/orderitems")
 //    public ResponseEntity<List<OrderItem>> getOrderItems(@PathVariable Long orderId) {
@@ -21,36 +27,35 @@ public class DataLoader {
 //    }
 
     @GetMapping("/tables")
-    public ResponseEntity<List<Table>> getTablesDetails() {
-        Table order = new Table();
-        order.setName("Order");
-        List<String> orderColumns = new ArrayList<>();
-        orderColumns.add("orderId");
-        orderColumns.add("customerId");
-        orderColumns.add("status");
-        orderColumns.add("totalAmount");
-        order.setColumns(orderColumns);
-        Table orderItem = new Table();
-        orderItem.setName("OrderItem");
-        List<String> orderItemColumns = new ArrayList<>();
-        orderItemColumns.add("orderItemId");
-        orderItemColumns.add("orderId");
-        orderItemColumns.add("productId");
-        orderItemColumns.add("quantity");
-        orderItemColumns.add("unitPrice");
-        orderItemColumns.add("totalPrice");
-        orderItem.setColumns(orderItemColumns);
+    public ResponseEntity<List<Table>> getAllTables() {
         List<Table> list = new ArrayList<>();
-        list.add(order);
-        list.add(orderItem);
+        List<String> allTableNames = databaseTableDetailsService.getAllTableNames();
+        allTableNames.forEach(tableName -> {
+            List<String> columnNames = databaseTableDetailsService.getColumnNames(tableName);
+            Table tName = new Table();
+            tName.setName(tableName);
+            tName.setColumns(columnNames);
+            list.add(tName);
+        });
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/tables-data")
-    public ResponseEntity<List<Table>> getTablesData(@RequestBody DataLoadRequest request) {
+    @GetMapping("/tables/{tableName}")
+    public List<Map<String, Object>> getTableDetails(@PathVariable String tableName) {
+        return databaseTableDetailsService.getTableDetails(tableName);
+    }
+
+    @GetMapping("/tables/{tableName}/columns")
+    public List<String> getColumnNames(@PathVariable String tableName) {
+        return databaseTableDetailsService.getColumnNames(tableName);
+    }
+
+    @PostMapping("/tables")
+    public List<Map<String, Object>> getTablesData(@RequestBody DataLoadRequest request) {
         List<Table> tables = request.getTables();
-//        Table table = tables.get();
-        return null;
+        if (!CollectionUtils.isEmpty(tables)) {
+        }
+        return databaseTableDetailsService.getTableDetails(request);
     }
 
 }
